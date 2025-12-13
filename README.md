@@ -79,42 +79,29 @@ For each meme \(i\):
 ### Visual Feature Extraction
 
 - CLIP ViT-based image encoder  
-- Extract visual feature embedding:
-  \[
-  \text{VFE}_i = f_{\text{ViT}}(I_i)
-  \]
+- Visual feature embedding: `VFE_i = f_ViT(I_i)`
 
 ### Textual Feature Extraction
 
-- Transformer-based text encoder \(f_{\text{TE}}\) (CLIP text / BERT / RoBERTa / MuRIL)  
-- Use the final \([\text{CLS}]\) token representation:
-  \[
-  \text{TFE}_i = f_{\text{TE}}(T_i)
-  \]
+- Transformer-based text encoder \(f_{\text{TE}}\) (CLIP text / BERT / XLM_RoBERTa / MuRIL)  
+- Use the final `[CLS]` token representation: `TFE_i = f_TE(T_i)`
 
 ### Feature Fusion Strategies
 
 1. **Baseline Concatenation**  
    - L2-normalize \(\text{VFE}_i\) and \(\text{TFE}_i\)  
-   - Concatenate:
-     \[
-     f_{\text{combined}} = \text{concat}(\bar{\text{VFE}}_i, \bar{\text{TFE}}_i)
-     \]
+   - Concatenate to form `f_combined = concat(VFE_i_norm, TFE_i_norm)`
 
 2. **Cross-Attention Fusion**  
    - Project \(\text{VFE}_i\) and \(\text{TFE}_i\) into a shared space  
    - Apply bidirectional cross-attention (image↔text)  
-   - L2-normalize attended features and concatenate to form \(f_{\text{combined}}\)
+   - L2-normalize attended features and concatenate to form `f_combined`
 
 3. **Gated Multimodal Fusion**  
    - Concatenate \(\text{VFE}_i\) and \(\text{TFE}_i\) to form \(h_i\)  
    - Compute gate \(g_i = \sigma(W_g h_i + b_g)\)  
-   - Combine:
-     \[
-     F_i^{\text{gated}} = g_i \odot \text{VFE}_i + (1 - g_i) \odot \text{TFE}_i
-     \]
-   - L2-normalize to obtain \(f_{\text{combined}}\)
-
+   - Combine: `F_i_gated = g_i * VFE_i + (1 - g_i) * TFE_i`  
+   - L2-normalize `F_i_gated` to obtain `f_combined`
 ### Multi-Task Decision Stage
 
 - Shared 3-layer MLP with BatchNorm, GELU, Dropout  
