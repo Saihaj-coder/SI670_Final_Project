@@ -71,10 +71,10 @@ This pipeline ensures cleaner, more consistent inputs for both modalities.
 
 ## 🧠 Model Overview
 
-For each meme \(i\):
+For each meme *i*:
 
-- Image: \(I_i\)  
-- OCR text: \(T_i = \{ w_1, \dots, w_n \}\)
+- Image: `I_i`  
+- OCR text: `T_i = { w_1, ..., w_n }`
 
 ### Visual Feature Extraction
 
@@ -83,25 +83,26 @@ For each meme \(i\):
 
 ### Textual Feature Extraction
 
-- Transformer-based text encoder \(f_{\text{TE}}\) (CLIP text / BERT / XLM_RoBERTa / MuRIL)  
+- Transformer-based text encoder `f_TE` (CLIP's text encoder / BERT / XLM_RoBERTa / MuRIL)  
 - Use the final `[CLS]` token representation: `TFE_i = f_TE(T_i)`
 
 ### Feature Fusion Strategies
 
 1. **Baseline Concatenation**  
-   - L2-normalize \(\text{VFE}_i\) and \(\text{TFE}_i\)  
+   - L2-normalize `VFE_i` and `TFE_i`  
    - Concatenate to form `f_combined = concat(VFE_i_norm, TFE_i_norm)`
 
 2. **Cross-Attention Fusion**  
-   - Project \(\text{VFE}_i\) and \(\text{TFE}_i\) into a shared space  
+   - Project `VFE_i` and `TFE_i` into a shared space  
    - Apply bidirectional cross-attention (image↔text)  
    - L2-normalize attended features and concatenate to form `f_combined`
 
 3. **Gated Multimodal Fusion**  
-   - Concatenate \(\text{VFE}_i\) and \(\text{TFE}_i\) to form \(h_i\)  
-   - Compute gate \(g_i = \sigma(W_g h_i + b_g)\)  
+   - Concatenate `VFE_i` and `TFE_i` to form `h_i`  
+   - Compute gate `g_i = σ(W_g h_i + b_g)`  
    - Combine: `F_i_gated = g_i * VFE_i + (1 - g_i) * TFE_i`  
    - L2-normalize `F_i_gated` to obtain `f_combined`
+
 ### Multi-Task Decision Stage
 
 - Shared 3-layer MLP with BatchNorm, GELU, Dropout  
