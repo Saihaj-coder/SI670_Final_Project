@@ -248,8 +248,6 @@ The main experiment notebooks are:
 - On **Memotion 3**, MuSiC achieves state-of-the-art performance on **Task A (sentiment classification)** and highly competitive results on **Task B (emotion classification)**, trailing only one prior method by a small margin.  
 - Ablation studies comparing **CLIP–BERT concatenation** versus **CLIP–BERT cross-attention fusion** show that attention-based fusion produces more discriminative feature spaces (as seen in t-SNE visualizations) and improved F1 scores.
 
-For detailed quantitative results and full tables, please refer to the project report.
-
 ---
 
 
